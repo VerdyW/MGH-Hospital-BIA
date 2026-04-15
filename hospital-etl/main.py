@@ -23,7 +23,7 @@ from src.load.load_dimensions import (
     build_dim_date,
     build_dim_time,
     build_dim_encounter_class,
-    build_dim_procedure,
+    build_dim_procedure_type,
     build_dim_clinical_code,
 )
 from src.load.load_facts import (
@@ -32,7 +32,7 @@ from src.load.load_facts import (
     build_fact_diagnosis,
     build_fact_billing,
 )
-from src.load.db_loader import get_engine, create_all_tables, load_table
+from src.load.db_loader import get_engine, load_table
 
 
 def run():
@@ -42,7 +42,7 @@ def run():
 
     STAGING_DIR.mkdir(parents=True, exist_ok=True)
 
-    # ── EXTRACT ───────────────────────────────────────────────
+    # 1. ── EXTRACT ───────────────────────────────────────────────
     logger.info("\n[1/3] EXTRACT")
     raw_patients      = read_csv(RAW_PATIENTS,      "patients")
     raw_encounters    = read_csv(RAW_ENCOUNTERS,    "encounters")
@@ -50,11 +50,11 @@ def run():
     raw_payers        = read_csv(RAW_PAYERS,        "payers")
     raw_organizations = read_csv(RAW_ORGANIZATIONS, "organizations")
 
-    # ── TRANSFORM ─────────────────────────────────────────────
+    # 2. ── TRANSFORM ─────────────────────────────────────────────
     logger.info("\n[2/3] TRANSFORM")
     patients      = clean_patients(raw_patients)
     encounters    = clean_encounters(raw_encounters)
-    procedures    = clean_procedures(raw_procedures)
+    procedures    = clean_procedures(raw_procedures, encounters)
     payers        = clean_payers(raw_payers)
     organizations = clean_organizations(raw_organizations)
 
@@ -76,7 +76,7 @@ def run():
     dim_date            = build_dim_date(encounters)
     dim_time            = build_dim_time()
     dim_encounter_class = build_dim_encounter_class(encounters)
-    dim_procedure       = build_dim_procedure(procedures)
+    dim_procedure_type  = build_dim_procedure_type(procedures)
     dim_clinical_code   = build_dim_clinical_code(encounters, procedures)
 
     # ── BUILD FACTS ───────────────────────────────────────────
@@ -84,9 +84,9 @@ def run():
         encounters, dim_encounter_class, dim_clinical_code, dim_date
     )
     fact_procedures = build_fact_procedures(
-        procedures, dim_procedure, dim_clinical_code
+        procedures, dim_procedure_type, dim_clinical_code
     )
-    fact_diagnosis  = build_fact_diagnosis(encounters, dim_clinical_code, dim_date)
+    fact_diagnosis  = build_fact_diagnosis(encounters, dim_clinical_code, dim_encounter_class)
 
     # Enrich fact_diagnosis with is_deceased from patients
     fact_diagnosis = (
@@ -94,13 +94,13 @@ def run():
         .merge(patients[["patient_id", "is_deceased"]], on="patient_id", how="left",
                suffixes=("_old", ""))
         .drop(columns=["is_deceased_old"], errors="ignore")
+        .rename(columns={"is_deceased": "mortality_flag"})
     )
 
-    fact_billing = build_fact_billing(encounters, dim_date)
+    fact_billing = build_fact_billing(encounters, dim_encounter_class, dim_clinical_code)
 
-    # ── LOAD TO SQLITE ────────────────────────────────────────
+    # 3. ── LOAD TO SQLITE ────────────────────────────────────────
     engine = get_engine()
-    create_all_tables(engine)
 
     load_table(patients,            "DIM_PATIENT",         engine)
     load_table(dim_date,            "DIM_DATE",            engine)
@@ -108,7 +108,7 @@ def run():
     load_table(payers,              "DIM_PAYER",           engine)
     load_table(organizations,       "DIM_ORGANIZATION",    engine)
     load_table(dim_encounter_class, "DIM_ENCOUNTER_CLASS", engine)
-    load_table(dim_procedure,       "DIM_PROCEDURE",       engine)
+    load_table(dim_procedure_type,  "DIM_PROCEDURE_TYPE",  engine)
     load_table(dim_clinical_code,   "DIM_CLINICAL_CODES",  engine)
 
     load_table(fact_encounter,  "FACT_ENCOUNTER",  engine)
@@ -118,7 +118,7 @@ def run():
 
     logger.info("\n" + "=" * 55)
     logger.info("  PIPELINE COMPLETE")
-    logger.info(f"  DB → {engine.url}")
+    logger.info(f"  DB -> {engine.url}")
     logger.info("=" * 55)
 
 

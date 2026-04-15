@@ -1,12 +1,14 @@
+import pandas as pd
 from config.settings import PROCEDURE_ADMISSION_KEYWORDS, PROCEDURE_THERAPY_KEYWORDS
+from src.utils.logger import logger
 
 
 def classify_procedure(description: str) -> str:
     """
     3-tier procedure categorisation:
-      1. Admission   — intake / triage / transfer
-      2. Therapy     — ongoing treatment / regime / injection
-      3. Procedure   — catch-all (including entries without SNOMED tags e.g. Colonoscopy)
+      1. Admission       — intake / triage / transfer
+      2. Therapy/Regime  — ongoing treatment / regime / injection
+      3. Procedure       — catch-all (including entries without SNOMED tags e.g. Colonoscopy)
     """
     if not isinstance(description, str):
         return "Procedure"

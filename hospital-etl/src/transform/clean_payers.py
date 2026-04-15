@@ -8,13 +8,13 @@ def clean_payers(df: pd.DataFrame) -> pd.DataFrame:
 
     df = df.rename(columns={
         "Id": "payer_id", "NAME": "name", "ADDRESS": "address",
-        "CITY": "city", "STATE_HEADQUARTERED": "state", "ZIP": "zip", "PHONE": "phone",
+        "CITY": "city", "STATE_HEADQUARTERED": "state_headquartered", "ZIP": "zip", "PHONE": "phone",
     })
 
-    df["zip"]     = zip_to_str(df["zip"])
-    df["address"] = df["address"].fillna("Unknown")
-    df["city"]    = df["city"].fillna("Unknown")
-    df["state"]   = df["state"].fillna("Unknown")
-    df["phone"]   = df["phone"].fillna("Unknown")
+    df["zip"]                   = zip_to_str(df["zip"])
+    df["address"]               = df["address"].fillna("Unknown")
+    df["city"]                  = df["city"].fillna("Unknown")
+    df["state_headquartered"]   = df["state_headquartered"].fillna("Unknown")
+    df["phone"]                 = df["phone"].fillna("Unknown")
 
-    return df[["payer_id", "name", "address", "city", "state", "zip", "phone"]]
+    return df[["payer_id", "name", "address", "city", "state_headquartered", "zip", "phone"]]

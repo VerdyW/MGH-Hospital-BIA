@@ -12,6 +12,7 @@ def clean_organizations(df: pd.DataFrame) -> pd.DataFrame:
     })
 
     df["name"]  = df["name"].str.title()
+    df["address"] = df["address"].fillna("Unknown")
     df["zip"]   = df["zip"].astype(str).str.zfill(5)
     df["state"] = df["state"].str.upper()
 

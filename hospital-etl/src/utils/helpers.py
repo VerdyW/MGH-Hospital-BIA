@@ -10,6 +10,14 @@ def duration_minutes(start: pd.Series, stop: pd.Series) -> pd.Series:
     """Return duration in minutes between two datetime series."""
     return ((stop - start).dt.total_seconds() / 60).round(2)
 
+def duration_dates(start: pd.Series, stop: pd.Series) -> pd.Series:
+    """Return duration in days between two datetime series."""
+    return (stop - start).dt.days
+
+def duration_hours(start: pd.Series, stop: pd.Series) -> pd.Series:
+    """Return duration in hours between two datetime series."""
+    return ((stop - start).dt.total_seconds() / 3600).round(2)
+
 
 def zip_to_str(series: pd.Series) -> pd.Series:
     """Convert float ZIP codes to zero-padded 5-digit strings."""

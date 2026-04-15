@@ -19,8 +19,9 @@ def build_dim_date(encounters_df: pd.DataFrame) -> pd.DataFrame:
     dim["day"]        = dim["full_date"].dt.day
     dim["day_name"]   = dim["full_date"].dt.strftime("%A")
     dim["full_date"]  = dim["full_date"].dt.strftime("%Y-%m-%d")
+    dim["is_weekend"] = dim["day_name"].isin(["Saturday", "Sunday"])
     logger.info(f"[DIM_DATE] Built {len(dim)} records")
-    return dim[["date_id","full_date","year","quarter","month","month_name","week","day","day_name"]]
+    return dim[["date_id","full_date","year","month","quarter","week","day","day_name","month_name","is_weekend"]]
 
 
 def build_dim_time() -> pd.DataFrame:
@@ -40,7 +41,7 @@ def build_dim_time() -> pd.DataFrame:
             elif h < 18: tod = "Afternoon"
             else:        tod = "Evening"
             rows.append({
-                "time_key":          time_key,
+                "time_id":           time_key,
                 "full_time":         full_time,
                 "hour24":            h,
                 "hour12":            hour12,
@@ -66,7 +67,7 @@ def build_dim_encounter_class(encounters_df: pd.DataFrame) -> pd.DataFrame:
     return dim
 
 
-def build_dim_procedure(procedures_df: pd.DataFrame) -> pd.DataFrame:
+def build_dim_procedure_type(procedures_df: pd.DataFrame) -> pd.DataFrame:
     dim = (
         procedures_df[["code", "description", "procedure_category"]]
         .drop_duplicates(subset=["code"])
@@ -77,9 +78,9 @@ def build_dim_procedure(procedures_df: pd.DataFrame) -> pd.DataFrame:
     dim["is_therapy"]   = dim["procedure_category"] == "Therapy/Regime"
     dim["is_procedure"] = dim["procedure_category"] == "Procedure"
     dim = dim.drop(columns=["procedure_category"])
-    dim.insert(0, "procedure_id", range(1, len(dim) + 1))
+    dim.insert(0, "procedure_type_id", range(1, len(dim) + 1))
     logger.info(f"[DIM_PROCEDURE] Built {len(dim)} records")
-    return dim
+    return dim[["procedure_type_id","code","description","is_admission","is_therapy","is_procedure"]]
 
 
 def build_dim_clinical_code(encounters_df: pd.DataFrame,
@@ -98,4 +99,4 @@ def build_dim_clinical_code(encounters_df: pd.DataFrame,
     )
     dim.insert(0, "clinical_code_id", range(1, len(dim) + 1))
     logger.info(f"[DIM_CLINICAL_CODES] Built {len(dim)} records")
-    return dim
+    return dim[["clinical_code_id","clinical_code","clinical_description"]]

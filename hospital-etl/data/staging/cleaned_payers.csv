@@ -1,4 +1,4 @@
-payer_id,name,address,city,state,zip,phone
+payer_id,name,address,city,state_headquartered,zip,phone
 b3221cfc-24fb-339e-823d-bc4136cbc4ed,Dual Eligible,7500 Security Blvd,Baltimore,MD,21244,1-877-267-2323
 7caa7254-5050-3b5e-9eae-bd5ea30e809c,Medicare,7500 Security Blvd,Baltimore,MD,21244,1-800-633-4227
 7c4411ce-02f1-39b5-b9ec-dfbea9ad3c1a,Medicaid,7500 Security Blvd,Baltimore,MD,21244,1-877-267-2323

@@ -9,19 +9,6 @@ def get_engine():
     return engine
 
 
-def create_all_tables(engine):
-    """Create all tables from models if they don't exist."""
-    from src.models.dim_patient import Base as B1
-    from src.models.dim_date import Base
-    from src.models.fact_encounter import Base
-    from src.models.fact_procedures import Base
-    from src.models.fact_diagnosis import Base
-    from src.models.fact_billing import Base
-
-    B1.metadata.create_all(engine)
-    logger.info("[DB] All tables created (if not exist)")
-
-
 def load_table(df, table_name: str, engine, if_exists: str = "replace"):
     """Load a DataFrame into a SQLite table."""
     df.to_sql(table_name, con=engine, if_exists=if_exists, index=False)
