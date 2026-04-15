@@ -1,0 +1,383 @@
+<html><head><meta charset='utf-8'><title>ETL Report</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 30px; background: #f5f5f5; }
+  h1   { color: #2c3e50; }
+  h2   { color: #34495e; border-bottom: 2px solid #3498db; padding-bottom: 6px; margin-top: 40px; }
+  h3   { color: #7f8c8d; margin-bottom: 4px; }
+  table{ border-collapse: collapse; width: 100%; margin-bottom: 20px; font-size: 13px; background: white; }
+  th   { background: #3498db; color: white; padding: 8px 10px; text-align: left; }
+  td   { padding: 6px 10px; border-bottom: 1px solid #ddd; }
+  tr:hover td { background: #eaf4fb; }
+  .badge-before { background:#e74c3c; color:white; padding:2px 8px; border-radius:4px; font-size:11px; }
+  .badge-after  { background:#27ae60; color:white; padding:2px 8px; border-radius:4px; font-size:11px; }
+  .meta { color:#888; font-size:12px; margin-bottom: 6px; }
+</style>
+</head><body>
+<h1>Hospital ETL — Before &amp; After Transformation Report</h1>
+<h2>Patients</h2>
+<p class='meta'>Raw: 974 rows, 20 cols &nbsp;→&nbsp; Cleaned: 974 rows, 18 cols</p>
+<h3><span class='badge-before'>BEFORE</span> — Raw sample</h3>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Id</th>
+      <th>BIRTHDATE</th>
+      <th>DEATHDATE</th>
+      <th>GENDER</th>
+      <th>MARITAL</th>
+      <th>RACE</th>
+      <th>ZIP</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>5605b66b-e92d-c16c-1b83-b8bf7040d51f</td>
+      <td>1977-03-19</td>
+      <td>NaN</td>
+      <td>F</td>
+      <td>M</td>
+      <td>white</td>
+      <td>2186.0</td>
+    </tr>
+    <tr>
+      <td>6e5ae27c-8038-7988-e2c0-25a103f01bfa</td>
+      <td>1940-02-19</td>
+      <td>NaN</td>
+      <td>M</td>
+      <td>M</td>
+      <td>white</td>
+      <td>2135.0</td>
+    </tr>
+    <tr>
+      <td>8123d076-0886-9007-e956-d5864aa121a7</td>
+      <td>1958-06-04</td>
+      <td>NaN</td>
+      <td>M</td>
+      <td>M</td>
+      <td>white</td>
+      <td>2170.0</td>
+    </tr>
+    <tr>
+      <td>770518e4-6133-648e-60c9-071eb2f0e2ce</td>
+      <td>1928-12-25</td>
+      <td>2017-09-29</td>
+      <td>M</td>
+      <td>M</td>
+      <td>white</td>
+      <td>2118.0</td>
+    </tr>
+    <tr>
+      <td>f96addf5-81b9-0aab-7855-d208d3d352c5</td>
+      <td>1928-12-25</td>
+      <td>2014-02-23</td>
+      <td>M</td>
+      <td>M</td>
+      <td>white</td>
+      <td>2125.0</td>
+    </tr>
+  </tbody>
+</table>
+<h3><span class='badge-after'>AFTER</span> — Transformed sample</h3>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>patient_id</th>
+      <th>birth_date</th>
+      <th>death_date</th>
+      <th>gender</th>
+      <th>marital_status</th>
+      <th>race</th>
+      <th>age</th>
+      <th>age_group</th>
+      <th>is_deceased</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>5605b66b-e92d-c16c-1b83-b8bf7040d51f</td>
+      <td>1977-03-19</td>
+      <td>NaN</td>
+      <td>Female</td>
+      <td>Married</td>
+      <td>White</td>
+      <td>49</td>
+      <td>35-49</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>6e5ae27c-8038-7988-e2c0-25a103f01bfa</td>
+      <td>1940-02-19</td>
+      <td>NaN</td>
+      <td>Male</td>
+      <td>Married</td>
+      <td>White</td>
+      <td>86</td>
+      <td>65+</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>8123d076-0886-9007-e956-d5864aa121a7</td>
+      <td>1958-06-04</td>
+      <td>NaN</td>
+      <td>Male</td>
+      <td>Married</td>
+      <td>White</td>
+      <td>67</td>
+      <td>65+</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>770518e4-6133-648e-60c9-071eb2f0e2ce</td>
+      <td>1928-12-25</td>
+      <td>2017-09-29</td>
+      <td>Male</td>
+      <td>Married</td>
+      <td>White</td>
+      <td>88</td>
+      <td>65+</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>f96addf5-81b9-0aab-7855-d208d3d352c5</td>
+      <td>1928-12-25</td>
+      <td>2014-02-23</td>
+      <td>Male</td>
+      <td>Married</td>
+      <td>White</td>
+      <td>85</td>
+      <td>65+</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+<h2>Encounters</h2>
+<p class='meta'>Raw: 27891 rows, 14 cols &nbsp;→&nbsp; Cleaned: 27891 rows, 15 cols</p>
+<h3><span class='badge-before'>BEFORE</span> — Raw sample</h3>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Id</th>
+      <th>START</th>
+      <th>STOP</th>
+      <th>ENCOUNTERCLASS</th>
+      <th>REASONCODE</th>
+      <th>REASONDESCRIPTION</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>32c84703-2481-49cd-d571-3899d5820253</td>
+      <td>2011-01-02T09:26:36Z</td>
+      <td>2011-01-02T12:58:36Z</td>
+      <td>ambulatory</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>c98059da-320a-c0a6-fced-c8815f3e3f39</td>
+      <td>2011-01-03T05:44:39Z</td>
+      <td>2011-01-03T06:01:42Z</td>
+      <td>outpatient</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>4ad28a3a-2479-782b-f29c-d5b3f41a001e</td>
+      <td>2011-01-03T14:32:11Z</td>
+      <td>2011-01-03T14:47:11Z</td>
+      <td>outpatient</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>c3f4da61-e4b4-21d5-587a-fbc89943bc19</td>
+      <td>2011-01-03T16:24:45Z</td>
+      <td>2011-01-03T16:39:45Z</td>
+      <td>wellness</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>a9183b4f-2572-72ea-54c2-b3cd038b4be7</td>
+      <td>2011-01-03T17:36:53Z</td>
+      <td>2011-01-03T17:51:53Z</td>
+      <td>ambulatory</td>
+      <td>55822004.0</td>
+      <td>Hyperlipidemia</td>
+    </tr>
+  </tbody>
+</table>
+<h3><span class='badge-after'>AFTER</span> — Transformed sample</h3>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>encounter_id</th>
+      <th>start_time</th>
+      <th>stop_time</th>
+      <th>encounter_class</th>
+      <th>los_minutes</th>
+      <th>reason_code</th>
+      <th>reason_description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>32c84703-2481-49cd-d571-3899d5820253</td>
+      <td>2011-01-02 09:26:36</td>
+      <td>2011-01-02 12:58:36</td>
+      <td>ambulatory</td>
+      <td>212.00</td>
+      <td>0</td>
+      <td>Not Specified</td>
+    </tr>
+    <tr>
+      <td>c98059da-320a-c0a6-fced-c8815f3e3f39</td>
+      <td>2011-01-03 05:44:39</td>
+      <td>2011-01-03 06:01:42</td>
+      <td>outpatient</td>
+      <td>17.05</td>
+      <td>0</td>
+      <td>Not Specified</td>
+    </tr>
+    <tr>
+      <td>4ad28a3a-2479-782b-f29c-d5b3f41a001e</td>
+      <td>2011-01-03 14:32:11</td>
+      <td>2011-01-03 14:47:11</td>
+      <td>outpatient</td>
+      <td>15.00</td>
+      <td>0</td>
+      <td>Not Specified</td>
+    </tr>
+    <tr>
+      <td>c3f4da61-e4b4-21d5-587a-fbc89943bc19</td>
+      <td>2011-01-03 16:24:45</td>
+      <td>2011-01-03 16:39:45</td>
+      <td>wellness</td>
+      <td>15.00</td>
+      <td>0</td>
+      <td>Not Specified</td>
+    </tr>
+    <tr>
+      <td>a9183b4f-2572-72ea-54c2-b3cd038b4be7</td>
+      <td>2011-01-03 17:36:53</td>
+      <td>2011-01-03 17:51:53</td>
+      <td>ambulatory</td>
+      <td>15.00</td>
+      <td>55822004</td>
+      <td>Hyperlipidemia</td>
+    </tr>
+  </tbody>
+</table>
+<h2>Procedures</h2>
+<p class='meta'>Raw: 47701 rows, 9 cols &nbsp;→&nbsp; Cleaned: 47701 rows, 11 cols</p>
+<h3><span class='badge-before'>BEFORE</span> — Raw sample</h3>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>START</th>
+      <th>STOP</th>
+      <th>CODE</th>
+      <th>DESCRIPTION</th>
+      <th>REASONCODE</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2011-01-02T09:26:36Z</td>
+      <td>2011-01-02T12:58:36Z</td>
+      <td>265764009</td>
+      <td>Renal dialysis (procedure)</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>2011-01-03T05:44:39Z</td>
+      <td>2011-01-03T06:01:42Z</td>
+      <td>76601001</td>
+      <td>Intramuscular injection</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <td>2011-01-04T14:49:55Z</td>
+      <td>2011-01-04T15:04:55Z</td>
+      <td>703423002</td>
+      <td>Combined chemotherapy and radiation therapy (procedure)</td>
+      <td>363406005.0</td>
+    </tr>
+    <tr>
+      <td>2011-01-05T04:02:09Z</td>
+      <td>2011-01-05T04:17:09Z</td>
+      <td>173160006</td>
+      <td>Diagnostic fiberoptic bronchoscopy (procedure)</td>
+      <td>162573006.0</td>
+    </tr>
+    <tr>
+      <td>2011-01-05T12:58:36Z</td>
+      <td>2011-01-05T16:42:36Z</td>
+      <td>265764009</td>
+      <td>Renal dialysis (procedure)</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+<h3><span class='badge-after'>AFTER</span> — Transformed sample</h3>
+<table class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>start_time</th>
+      <th>stop_time</th>
+      <th>code</th>
+      <th>description</th>
+      <th>procedure_category</th>
+      <th>duration_minutes</th>
+      <th>reason_code</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2011-01-02 09:26:36</td>
+      <td>2011-01-02 12:58:36</td>
+      <td>265764009</td>
+      <td>Renal dialysis (procedure)</td>
+      <td>Therapy/Regime</td>
+      <td>212.00</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>2011-01-03 05:44:39</td>
+      <td>2011-01-03 06:01:42</td>
+      <td>76601001</td>
+      <td>Intramuscular injection</td>
+      <td>Therapy/Regime</td>
+      <td>17.05</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>2011-01-04 14:49:55</td>
+      <td>2011-01-04 15:04:55</td>
+      <td>703423002</td>
+      <td>Combined chemotherapy and radiation therapy (procedure)</td>
+      <td>Therapy/Regime</td>
+      <td>15.00</td>
+      <td>363406005</td>
+    </tr>
+    <tr>
+      <td>2011-01-05 04:02:09</td>
+      <td>2011-01-05 04:17:09</td>
+      <td>173160006</td>
+      <td>Diagnostic fiberoptic bronchoscopy (procedure)</td>
+      <td>Procedure</td>
+      <td>15.00</td>
+      <td>162573006</td>
+    </tr>
+    <tr>
+      <td>2011-01-05 12:58:36</td>
+      <td>2011-01-05 16:42:36</td>
+      <td>265764009</td>
+      <td>Renal dialysis (procedure)</td>
+      <td>Therapy/Regime</td>
+      <td>224.00</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</body></html>
