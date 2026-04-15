@@ -23,7 +23,7 @@ from src.load.load_dimensions import (
     build_dim_date,
     build_dim_time,
     build_dim_encounter_class,
-    build_dim_procedure_type,
+    build_dim_procedure,
     build_dim_clinical_code,
 )
 from src.load.load_facts import (
@@ -76,7 +76,7 @@ def run():
     dim_date            = build_dim_date(encounters)
     dim_time            = build_dim_time()
     dim_encounter_class = build_dim_encounter_class(encounters)
-    dim_procedure_type  = build_dim_procedure_type(procedures)
+    dim_procedure       = build_dim_procedure(procedures)
     dim_clinical_code   = build_dim_clinical_code(encounters, procedures)
 
     # ── BUILD FACTS ───────────────────────────────────────────
@@ -84,14 +84,15 @@ def run():
         encounters, dim_encounter_class, dim_clinical_code, dim_date
     )
     fact_procedures = build_fact_procedures(
-        procedures, dim_procedure_type, dim_clinical_code
+        procedures, dim_procedure, dim_clinical_code
     )
     fact_diagnosis  = build_fact_diagnosis(encounters, dim_clinical_code, dim_date)
 
     # Enrich fact_diagnosis with is_deceased from patients
     fact_diagnosis = (
         fact_diagnosis
-        .merge(patients[["patient_id", "is_deceased"]], on="patient_id", how="left", suffixes=("_old", ""))
+        .merge(patients[["patient_id", "is_deceased"]], on="patient_id", how="left",
+               suffixes=("_old", ""))
         .drop(columns=["is_deceased_old"], errors="ignore")
     )
 
@@ -101,17 +102,15 @@ def run():
     engine = get_engine()
     create_all_tables(engine)
 
-    # Dimensions
     load_table(patients,            "DIM_PATIENT",         engine)
     load_table(dim_date,            "DIM_DATE",            engine)
     load_table(dim_time,            "DIM_TIME",            engine)
     load_table(payers,              "DIM_PAYER",           engine)
     load_table(organizations,       "DIM_ORGANIZATION",    engine)
     load_table(dim_encounter_class, "DIM_ENCOUNTER_CLASS", engine)
-    load_table(dim_procedure_type,  "DIM_PROCEDURE_TYPE",  engine)
+    load_table(dim_procedure,       "DIM_PROCEDURE",       engine)
     load_table(dim_clinical_code,   "DIM_CLINICAL_CODES",  engine)
 
-    # Facts
     load_table(fact_encounter,  "FACT_ENCOUNTER",  engine)
     load_table(fact_procedures, "FACT_PROCEDURES", engine)
     load_table(fact_diagnosis,  "FACT_DIAGNOSIS",  engine)

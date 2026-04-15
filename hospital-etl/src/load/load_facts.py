@@ -3,7 +3,6 @@ from src.utils.logger import logger
 
 
 def _time_key(dt_series: pd.Series) -> pd.Series:
-    """Extract HHMM integer key from a datetime series."""
     dt = pd.to_datetime(dt_series)
     return dt.dt.hour * 100 + dt.dt.minute
 
@@ -24,7 +23,7 @@ def build_fact_encounter(encounters_df: pd.DataFrame,
 
     fact = encounters_df.copy()
     fact["encounter_class_id"] = fact["encounter_class"].map(enc_class_map)
-    fact["clinical_code_id"]   = fact["code"].astype(str).map(clinical_map)
+    fact["clinical_code_id"]   = fact["reason_code"].astype(str).map(clinical_map)
     fact["date_id"]            = pd.to_datetime(fact["start_time"]).dt.strftime("%Y%m%d").astype(int)
     fact["start_time_id"]      = _time_key(fact["start_time"])
     fact["stop_time_id"]       = _time_key(fact["stop_time"])
@@ -42,12 +41,12 @@ def build_fact_encounter(encounters_df: pd.DataFrame,
 
 
 def build_fact_procedures(procedures_df: pd.DataFrame,
-                          dim_procedure_type: pd.DataFrame,
+                          dim_procedure: pd.DataFrame,
                           dim_clinical_code: pd.DataFrame) -> pd.DataFrame:
 
-    proc_type_map = dict(zip(
-        dim_procedure_type["procedure_category"],
-        dim_procedure_type["procedure_type_id"]
+    proc_map = dict(zip(
+        dim_procedure["code"].astype(str),
+        dim_procedure["procedure_id"]
     ))
     clinical_map = dict(zip(
         dim_clinical_code["clinical_code"].astype(str),
@@ -55,14 +54,14 @@ def build_fact_procedures(procedures_df: pd.DataFrame,
     ))
 
     fact = procedures_df.copy()
-    fact["procedure_type_id"] = fact["procedure_category"].map(proc_type_map)
-    fact["clinical_code_id"]  = fact["code"].astype(str).map(clinical_map)
+    fact["procedure_id"]      = fact["code"].astype(str).map(proc_map)
+    fact["clinical_code_id"]  = fact["reason_code"].astype(str).map(clinical_map)
     fact["date_id"]           = pd.to_datetime(fact["start_time"]).dt.strftime("%Y%m%d").astype(int)
     fact["start_time_id"]     = _time_key(fact["start_time"])
     fact["stop_time_id"]      = _time_key(fact["stop_time"])
 
     fact = fact[[
-        "patient_id", "encounter_id", "procedure_type_id", "clinical_code_id",
+        "patient_id", "encounter_id", "procedure_id", "clinical_code_id",
         "date_id", "start_time_id", "stop_time_id",
         "duration_minutes", "base_cost", "reason_code", "reason_description",
     ]]
@@ -81,7 +80,7 @@ def build_fact_diagnosis(encounters_df: pd.DataFrame,
     ))
 
     fact = encounters_df[encounters_df["reason_code"] != 0].copy()
-    fact["clinical_code_id"] = fact["code"].astype(str).map(clinical_map)
+    fact["clinical_code_id"] = fact["reason_code"].astype(str).map(clinical_map)
     fact["date_id"]          = pd.to_datetime(fact["start_time"]).dt.strftime("%Y%m%d").astype(int)
     fact["is_deceased"]      = 0  # enriched in main.py
 
