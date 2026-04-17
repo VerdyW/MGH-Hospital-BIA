@@ -1,5 +1,7 @@
 import sys
 import os
+from pathlib import Path
+from config.paths import DB_PATH
 sys.path.insert(0, os.path.dirname(__file__))
 
 from src.utils.logger import logger
@@ -34,6 +36,25 @@ from src.load.load_facts import (
 )
 from src.load.db_loader import get_engine, load_table
 
+# helper replace function
+def confirm_db_replace() -> bool:
+    """Prompt user to confirm replacing existing database file."""
+    if not Path(DB_PATH).exists():
+        return True
+
+    logger.warning(f"Database already exists at: {DB_PATH}")
+    logger.warning("All existing tables will be permanently deleted.")
+
+    print("Replace existing database? [y/n]: ", end="", flush=True)
+    answer = input().strip().lower()
+
+    if answer == "y":
+        os.remove(DB_PATH)
+        logger.info("Database deleted. Rebuilding from scratch...")
+        return True
+    else:
+        logger.info("Pipeline cancelled. Existing database untouched.")
+        return False
 
 def run():
     logger.info("=" * 55)
@@ -42,7 +63,7 @@ def run():
 
     STAGING_DIR.mkdir(parents=True, exist_ok=True)
 
-    # 1. ── EXTRACT ───────────────────────────────────────────────
+    # 1. = EXTRACT ========================
     logger.info("\n[1/3] EXTRACT")
     raw_patients      = read_csv(RAW_PATIENTS,      "patients")
     raw_encounters    = read_csv(RAW_ENCOUNTERS,    "encounters")
@@ -50,7 +71,7 @@ def run():
     raw_payers        = read_csv(RAW_PAYERS,        "payers")
     raw_organizations = read_csv(RAW_ORGANIZATIONS, "organizations")
 
-    # 2. ── TRANSFORM ─────────────────────────────────────────────
+    # 2. = TRANSFORM =======================
     logger.info("\n[2/3] TRANSFORM")
     patients      = clean_patients(raw_patients)
     encounters    = clean_encounters(raw_encounters)
@@ -70,8 +91,9 @@ def run():
     payers.to_csv(STAGING_PAYERS,               index=False)
     organizations.to_csv(STAGING_ORGANIZATIONS, index=False)
     logger.info("[STAGING] All cleaned CSVs saved to data/staging/")
-
-    # ── BUILD DIMENSIONS ──────────────────────────────────────
+    if not confirm_db_replace():
+        return
+    # = BUILD DIMENSIONS ===================
     logger.info("\n[3/3] LOAD")
     dim_date            = build_dim_date(encounters)
     dim_time            = build_dim_time()
@@ -79,7 +101,7 @@ def run():
     dim_procedure_type  = build_dim_procedure_type(procedures)
     dim_clinical_code   = build_dim_clinical_code(encounters, procedures)
 
-    # ── BUILD FACTS ───────────────────────────────────────────
+    # = BUILD FACTS ======================
     fact_encounter  = build_fact_encounter(
         encounters, dim_encounter_class, dim_clinical_code, dim_date
     )
@@ -99,7 +121,7 @@ def run():
 
     fact_billing = build_fact_billing(encounters, dim_encounter_class, dim_clinical_code)
 
-    # 3. ── LOAD TO SQLITE ────────────────────────────────────────
+    # 3. = LOAD TO SQLITE ====================
     engine = get_engine()
 
     load_table(patients,            "DIM_PATIENT",         engine)

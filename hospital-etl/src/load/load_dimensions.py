@@ -74,13 +74,9 @@ def build_dim_procedure_type(procedures_df: pd.DataFrame) -> pd.DataFrame:
         .sort_values("code")
         .reset_index(drop=True)
     )
-    dim["is_admission"] = dim["procedure_category"] == "Admission"
-    dim["is_therapy"]   = dim["procedure_category"] == "Therapy/Regime"
-    dim["is_procedure"] = dim["procedure_category"] == "Procedure"
-    dim = dim.drop(columns=["procedure_category"])
     dim.insert(0, "procedure_type_id", range(1, len(dim) + 1))
-    logger.info(f"[DIM_PROCEDURE] Built {len(dim)} records")
-    return dim[["procedure_type_id","code","description","is_admission","is_therapy","is_procedure"]]
+    logger.info(f"[DIM_PROCEDURE_TYPE] Built {len(dim)} records")
+    return dim[["procedure_type_id", "code", "description", "procedure_category"]]
 
 
 def build_dim_clinical_code(encounters_df: pd.DataFrame,

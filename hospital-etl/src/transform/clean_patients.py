@@ -18,7 +18,7 @@ def clean_patients(df: pd.DataFrame) -> pd.DataFrame:
     df["birth_date"] = pd.to_datetime(df["birth_date"], errors="coerce")
     df["death_date"] = pd.to_datetime(df["death_date"], errors="coerce")
 
-    df["is_deceased"] = df["death_date"].notna().astype(int)
+    df["is_deceased"] = df["death_date"].notna().astype(bool)
 
     ref = pd.Timestamp("today").normalize()
     df["age"] = df.apply(

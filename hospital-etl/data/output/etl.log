@@ -1,57 +1,60 @@
-20:54:34  INFO      NumExpr defaulting to 6 threads.
-20:54:35  INFO      =======================================================
-20:54:35  INFO        HOSPITAL DATA WAREHOUSE — ETL PIPELINE
-20:54:35  INFO      =======================================================
-20:54:35  INFO      
+11:28:44  INFO      NumExpr defaulting to 6 threads.
+11:28:45  INFO      =======================================================
+11:28:45  INFO        HOSPITAL DATA WAREHOUSE — ETL PIPELINE
+11:28:45  INFO      =======================================================
+11:28:45  INFO      
 [1/3] EXTRACT
-20:54:35  INFO      [EXTRACT] patients: 974 rows loaded from patients.csv
-20:54:35  INFO      [EXTRACT] encounters: 27891 rows loaded from encounters.csv
-20:54:35  INFO      [EXTRACT] procedures: 47701 rows loaded from procedures.csv
-20:54:35  INFO      [EXTRACT] payers: 10 rows loaded from payers.csv
-20:54:35  INFO      [EXTRACT] organizations: 1 rows loaded from organizations.csv
-20:54:35  INFO      
+11:28:45  INFO      [EXTRACT] patients: 974 rows loaded from patients.csv
+11:28:45  INFO      [EXTRACT] encounters: 27891 rows loaded from encounters.csv
+11:28:45  INFO      [EXTRACT] procedures: 47701 rows loaded from procedures.csv
+11:28:45  INFO      [EXTRACT] payers: 10 rows loaded from payers.csv
+11:28:45  INFO      [EXTRACT] organizations: 1 rows loaded from organizations.csv
+11:28:45  INFO      
 [2/3] TRANSFORM
-20:54:35  INFO      [TRANSFORM] Cleaning patients...
-20:54:35  INFO      [TRANSFORM] Cleaning encounters...
-20:54:35  INFO      [TRANSFORM] Cleaning procedures...
-20:54:35  INFO      [TRANSFORM] Cleaning payers...
-20:54:35  INFO      [TRANSFORM] Cleaning organizations...
-20:54:35  INFO        [DIM_PATIENT] 974 rows | 18 cols
-20:54:35  INFO        [DIM_PATIENT] No unexpected nulls
-20:54:35  INFO        [FACT_ENCOUNTER (staged)] 27891 rows | 16 cols
-20:54:35  INFO        [FACT_ENCOUNTER (staged)] No unexpected nulls
-20:54:35  INFO        [FACT_PROCEDURES (staged)] 47701 rows | 13 cols
-20:54:36  INFO        [FACT_PROCEDURES (staged)] No unexpected nulls
-20:54:36  INFO        [DIM_PAYER] 10 rows | 7 cols
-20:54:36  INFO        [DIM_PAYER] No unexpected nulls
-20:54:36  INFO        [DIM_ORGANIZATION] 1 rows | 6 cols
-20:54:36  INFO        [DIM_ORGANIZATION] No unexpected nulls
-20:54:36  INFO      [STAGING] All cleaned CSVs saved to data/staging/
-20:54:36  INFO      
+11:28:45  INFO      [TRANSFORM] Cleaning patients...
+11:28:45  INFO      [TRANSFORM] Cleaning encounters...
+11:28:45  INFO      [TRANSFORM] Cleaning procedures...
+11:28:45  INFO      [TRANSFORM] Cleaning payers...
+11:28:45  INFO      [TRANSFORM] Cleaning organizations...
+11:28:45  INFO        [DIM_PATIENT] 974 rows | 18 cols
+11:28:45  INFO        [DIM_PATIENT] No unexpected nulls
+11:28:45  INFO        [FACT_ENCOUNTER (staged)] 27891 rows | 16 cols
+11:28:45  INFO        [FACT_ENCOUNTER (staged)] No unexpected nulls
+11:28:45  INFO        [FACT_PROCEDURES (staged)] 47701 rows | 13 cols
+11:28:45  INFO        [FACT_PROCEDURES (staged)] No unexpected nulls
+11:28:45  INFO        [DIM_PAYER] 10 rows | 7 cols
+11:28:45  INFO        [DIM_PAYER] No unexpected nulls
+11:28:45  INFO        [DIM_ORGANIZATION] 1 rows | 6 cols
+11:28:45  INFO        [DIM_ORGANIZATION] No unexpected nulls
+11:28:46  INFO      [STAGING] All cleaned CSVs saved to data/staging/
+11:28:46  WARNING   Database already exists at: C:\Users\Verdy\Desktop\Hospital patient\python ETL\hospital-etl\data\output\hospital_dw.db
+11:28:46  WARNING   All existing tables will be permanently deleted.
+11:28:47  INFO      Database deleted. Rebuilding from scratch...
+11:28:47  INFO      
 [3/3] LOAD
-20:54:36  INFO      [DIM_DATE] Built 4032 records
-20:54:36  INFO      [DIM_TIME] Built 1440 records
-20:54:36  INFO      [DIM_ENCOUNTER_CLASS] Built 6 records
-20:54:36  INFO      [DIM_PROCEDURE] Built 157 records
-20:54:36  INFO      [DIM_CLINICAL_CODES] Built 88 records
-20:54:37  INFO      [FACT_ENCOUNTER] Built 27891 records
-20:54:38  INFO      [FACT_PROCEDURES] Built 47701 records
-20:54:38  INFO      [FACT_DIAGNOSIS] Built 27891 records
-20:54:38  INFO      [FACT_BILLING] Built 27891 records
-20:54:39  INFO      [LOAD] DIM_PATIENT: 974 rows loaded
-20:54:39  INFO      [LOAD] DIM_DATE: 4032 rows loaded
-20:54:39  INFO      [LOAD] DIM_TIME: 1440 rows loaded
-20:54:39  INFO      [LOAD] DIM_PAYER: 10 rows loaded
-20:54:39  INFO      [LOAD] DIM_ORGANIZATION: 1 rows loaded
-20:54:39  INFO      [LOAD] DIM_ENCOUNTER_CLASS: 6 rows loaded
-20:54:39  INFO      [LOAD] DIM_PROCEDURE_TYPE: 157 rows loaded
-20:54:39  INFO      [LOAD] DIM_CLINICAL_CODES: 88 rows loaded
-20:54:39  INFO      [LOAD] FACT_ENCOUNTER: 27891 rows loaded
-20:54:40  INFO      [LOAD] FACT_PROCEDURES: 47701 rows loaded
-20:54:40  INFO      [LOAD] FACT_DIAGNOSIS: 27891 rows loaded
-20:54:40  INFO      [LOAD] FACT_BILLING: 27891 rows loaded
-20:54:40  INFO      
+11:28:47  INFO      [DIM_DATE] Built 4032 records
+11:28:47  INFO      [DIM_TIME] Built 1440 records
+11:28:47  INFO      [DIM_ENCOUNTER_CLASS] Built 6 records
+11:28:47  INFO      [DIM_PROCEDURE_TYPE] Built 157 records
+11:28:47  INFO      [DIM_CLINICAL_CODES] Built 88 records
+11:28:47  INFO      [FACT_ENCOUNTER] Built 27891 records
+11:28:48  INFO      [FACT_PROCEDURES] Built 47701 records
+11:28:48  INFO      [FACT_DIAGNOSIS] Built 27891 records
+11:28:49  INFO      [FACT_BILLING] Built 27891 records
+11:28:49  INFO      [LOAD] DIM_PATIENT: 974 rows loaded
+11:28:49  INFO      [LOAD] DIM_DATE: 4032 rows loaded
+11:28:49  INFO      [LOAD] DIM_TIME: 1440 rows loaded
+11:28:49  INFO      [LOAD] DIM_PAYER: 10 rows loaded
+11:28:49  INFO      [LOAD] DIM_ORGANIZATION: 1 rows loaded
+11:28:49  INFO      [LOAD] DIM_ENCOUNTER_CLASS: 6 rows loaded
+11:28:49  INFO      [LOAD] DIM_PROCEDURE_TYPE: 157 rows loaded
+11:28:49  INFO      [LOAD] DIM_CLINICAL_CODES: 88 rows loaded
+11:28:49  INFO      [LOAD] FACT_ENCOUNTER: 27891 rows loaded
+11:28:50  INFO      [LOAD] FACT_PROCEDURES: 47701 rows loaded
+11:28:50  INFO      [LOAD] FACT_DIAGNOSIS: 27891 rows loaded
+11:28:51  INFO      [LOAD] FACT_BILLING: 27891 rows loaded
+11:28:51  INFO      
 =======================================================
-20:54:40  INFO        PIPELINE COMPLETE
-20:54:40  INFO        DB -> sqlite:///C:\Users\Verdy\Desktop\Hospital patient\python ETL\hospital-etl\data\output\hospital_dw.db
-20:54:40  INFO      =======================================================
+11:28:51  INFO        PIPELINE COMPLETE
+11:28:51  INFO        DB -> sqlite:///C:\Users\Verdy\Desktop\Hospital patient\python ETL\hospital-etl\data\output\hospital_dw.db
+11:28:51  INFO      =======================================================
