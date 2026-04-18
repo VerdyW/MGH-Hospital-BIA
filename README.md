@@ -13,7 +13,7 @@ This project implements a full ETL pipeline that ingests raw healthcare CSV data
 
 ## Data Sources
 
-Six CSV source files extracted from a synthetic healthcare dataset (Synthea) acquired from [Maven Hospital Patient Records](https://mavenanalytics.io/challenges/maven-hospital-challenge](https://mavenanalytics.io/data-playground/hospital-patient-records):
+Six CSV source files extracted from a synthetic healthcare dataset (Synthea) acquired from [Maven Hospital Patient Records](https://mavenanalytics.io/data-playground/hospital-patient-records):
 
 | File | Description | Rows |
 |---|---|---|
