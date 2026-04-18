@@ -13,7 +13,7 @@ This project implements a full ETL pipeline that ingests raw healthcare CSV data
 
 ## Data Sources
 
-Six CSV source files extracted from a synthetic healthcare dataset (Synthea):
+Six CSV source files extracted from a synthetic healthcare dataset (Synthea) acquired from [Maven Hospital Patient Records](https://mavenanalytics.io/data-playground/hospital-patient-records):
 
 | File | Description | Rows |
 |---|---|---|
@@ -152,8 +152,7 @@ Transformed DataFrames are loaded into the target database using a `load_table` 
 
 ## Business Processes Covered
 
-1. **Patient Registration & Admissions** — patient demographics, age distribution, mortality
-2. **Encounter Management** — visit volume, duration, encounter class distribution
+1. **Encounter Management** — visit volume, duration, encounter class distribution
+2. **Billing & Insurance Claims** — claim costs, payer coverage, out-of-pocket breakdown
 3. **Clinical Procedures** — procedure categorization, frequency, and cost
-4. **Diagnosis & Treatment** — diagnosis codes, condition prevalence, mortality by condition
-5. **Billing & Insurance Claims** — claim costs, payer coverage, out-of-pocket breakdown
+4. **Diagnosis Management** — diagnosis codes, mortality by diagnosis
