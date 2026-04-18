@@ -1,6 +1,6 @@
 # Procedure category rules (3-tier classification)
 PROCEDURE_ADMISSION_KEYWORDS = [
-    "admission", "transfer", "triage", "intake", "registration"
+    "admission", "transfer", "triage", "intake", "registration", "admit", 
 ]
 PROCEDURE_THERAPY_KEYWORDS = [
     "therapy", "regime", "treatment", "dialysis", "chemotherapy",
