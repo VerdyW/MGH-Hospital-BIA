@@ -93,6 +93,8 @@ def run():
     logger.info("[STAGING] All cleaned CSVs saved to data/staging/")
     if not confirm_db_replace():
         return
+    
+    # 3. = LOAD ===========================
     # = BUILD DIMENSIONS ===================
     logger.info("\n[3/3] LOAD")
     dim_date            = build_dim_date(encounters)
@@ -121,7 +123,7 @@ def run():
 
     fact_billing = build_fact_billing(encounters, dim_encounter_class, dim_clinical_code)
 
-    # 3. = LOAD TO SQLITE ====================
+    # = LOAD TO SQLITE ====================
     engine = get_engine()
 
     load_table(patients,            "DIM_PATIENT",         engine)

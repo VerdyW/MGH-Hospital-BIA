@@ -18,6 +18,12 @@ def clean_patients(df: pd.DataFrame) -> pd.DataFrame:
     df["birth_date"] = pd.to_datetime(df["birth_date"], errors="coerce")
     df["death_date"] = pd.to_datetime(df["death_date"], errors="coerce")
 
+     # split birth_place into components — format: "city  state  country"
+    birth_split = df["birth_place"].str.split(r"\s{2,}", expand=True)
+    df["birth_city"]    = birth_split[0].str.strip().fillna("Unknown")
+    df["birth_state"]   = birth_split[1].str.strip().fillna("Unknown")
+    df["birth_country"] = birth_split[2].str.strip().fillna("Unknown")
+
     df["is_deceased"] = df["death_date"].notna().astype(bool)
 
     ref = pd.Timestamp("today").normalize()
@@ -41,5 +47,6 @@ def clean_patients(df: pd.DataFrame) -> pd.DataFrame:
         "patient_id", "birth_date", "death_date", "prefix",
         "first_name", "last_name", "suffix", "maiden_name",
         "marital_status", "race", "ethnicity", "gender",
-        "birth_place", "city", "county", "age", "age_group", "is_deceased",
+        "birth_city", "birth_state", "birth_country",
+        "city", "county", "age", "age_group", "is_deceased",
     ]]
