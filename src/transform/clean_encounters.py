@@ -1,5 +1,5 @@
 import pandas as pd
-from src.utils.helpers import parse_datetime, duration_dates, duration_hours
+from src.utils.helpers import parse_datetime, duration_dates, duration_hours, duration_minutes
 from src.utils.logger import logger
 
 
@@ -21,6 +21,7 @@ def clean_encounters(df: pd.DataFrame) -> pd.DataFrame:
     df["stop_time"]  = parse_datetime(df["stop_time"])
     df["duration_days"] = duration_dates(df["start_time"], df["stop_time"])
     df["duration_hours"] = duration_hours(df["start_time"], df["stop_time"])
+    df["duration_minutes"] = duration_minutes(df["start_time"], df["stop_time"])
 
     df["encounter_class"] = df["encounter_class"].str.lower().str.strip()
 
@@ -31,7 +32,7 @@ def clean_encounters(df: pd.DataFrame) -> pd.DataFrame:
     return df[[
         "encounter_id", "patient_id", "organization_id", "payer_id",
         "encounter_class", "code", "description",
-        "start_time", "stop_time", "duration_days", "duration_hours",
+        "start_time", "stop_time", "duration_days", "duration_hours", "duration_minutes",
         "base_encounter_cost", "total_claim_cost", "payer_coverage",
         "reason_code", "reason_description",
     ]]

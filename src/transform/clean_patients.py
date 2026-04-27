@@ -31,7 +31,7 @@ def clean_patients(df: pd.DataFrame) -> pd.DataFrame:
         lambda r: int(
             ((r["death_date"] if pd.notna(r["death_date"]) else ref) - r["birth_date"]).days // 365
         ), axis=1
-    )
+    ).astype(int)
     df["age_group"] = pd.cut(df["age"], bins=AGE_BINS, labels=AGE_LABELS, right=False).astype(str)
 
     df["gender"]         = df["gender"].map({"F": "Female", "M": "Male"})

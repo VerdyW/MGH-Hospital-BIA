@@ -53,6 +53,10 @@ def build_dim_time() -> pd.DataFrame:
                 "is_business_hours": (h >= 8) and (h < 17),
             })
     dim = pd.DataFrame(rows)
+    dim['time_id'] = dim['time_id'].astype(int)
+    dim['hour24'] = dim['hour24'].astype(int)
+    dim['hour12'] = dim['hour12'].astype(int)
+    dim['minute'] = dim['minute'].astype(int)
     logger.info(f"[DIM_TIME] Built {len(dim)} records")
     return dim
 
@@ -63,6 +67,7 @@ def build_dim_encounter_class(encounters_df: pd.DataFrame) -> pd.DataFrame:
         "encounter_class_id": range(1, len(classes) + 1),
         "encounter_class":    classes,
     })
+    dim['encounter_class_id'] = dim['encounter_class_id'].astype(int)
     logger.info(f"[DIM_ENCOUNTER_CLASS] Built {len(dim)} records")
     return dim
 
@@ -75,6 +80,8 @@ def build_dim_procedure_type(procedures_df: pd.DataFrame) -> pd.DataFrame:
         .reset_index(drop=True)
     )
     dim.insert(0, "procedure_type_id", range(1, len(dim) + 1))
+    dim['procedure_type_id'] = dim['procedure_type_id'].astype(int)
+    dim['code'] = dim['code'].astype(str)
     logger.info(f"[DIM_PROCEDURE_TYPE] Built {len(dim)} records")
     return dim[["procedure_type_id", "code", "description", "procedure_category"]]
 
@@ -94,5 +101,6 @@ def build_dim_clinical_code(encounters_df: pd.DataFrame,
         .reset_index(drop=True)
     )
     dim.insert(0, "clinical_code_id", range(1, len(dim) + 1))
+    dim['clinical_code_id'] = dim['clinical_code_id'].astype(int)
     logger.info(f"[DIM_CLINICAL_CODES] Built {len(dim)} records")
     return dim[["clinical_code_id","clinical_code","clinical_description"]]

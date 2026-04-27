@@ -30,6 +30,8 @@ def clean_procedures(df: pd.DataFrame, encounters_df: pd.DataFrame) -> pd.DataFr
     df["reason_code"] = df["reason_code"].fillna(0).astype("Int64").astype(str)
     df["reason_description"] = df["reason_description"].fillna("Not Specified")
 
+    df["base_cost"] = df["base_cost"].fillna(0).round(2).astype(float)
+
     # Map organization_id from encounters via encounter_id
     org_map = encounters_df.set_index("encounter_id")["organization_id"]
     df["organization_id"] = df["encounter_id"].map(org_map)

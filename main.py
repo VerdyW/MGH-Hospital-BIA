@@ -105,7 +105,7 @@ def run():
 
     # = BUILD FACTS ======================
     fact_encounter  = build_fact_encounter(
-        encounters, dim_encounter_class, dim_clinical_code, dim_date
+        encounters, dim_encounter_class, dim_clinical_code
     )
     fact_procedures = build_fact_procedures(
         procedures, dim_procedure_type, dim_clinical_code
